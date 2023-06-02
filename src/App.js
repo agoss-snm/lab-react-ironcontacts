@@ -3,7 +3,7 @@ import contactsData from './contacts.json';
 import '../src/App.css';
 
 function App() {
-  const [contacts, setContacts] = useState(contactsData);
+  const [filteredContacts, setFilteredContacts]= useState(filterFunction(contactsData))
 
   function filterFunction(contacts) {
     let newArray = [];
@@ -13,31 +13,28 @@ function App() {
     return newArray;
   }
 
-  let filteredContacts = filterFunction(contacts);
-
   function addRandomContact() {
     const randomIndex = Math.floor(Math.random() * (contactsData.length - 5)) + 5;
     const randomActor = contactsData[randomIndex]; 
-    filteredContacts = [... filteredContacts, randomActor]
-    setContacts( filteredContacts);
+    setFilteredContacts(prevFilteredContacts => [...prevFilteredContacts, randomActor]);
   }
 
   function sortByPopularity() {
     const updatedContacts = [...filteredContacts];
     updatedContacts.sort((a, b) => b.popularity - a.popularity);
     const finalContacts = updatedContacts.slice(0, 5);
-    setContacts(finalContacts);
+    setFilteredContacts(finalContacts);
   }
   
 
   function sortByName() {
     const sortedContacts = [...filteredContacts].sort((a, b) => a.name.localeCompare(b.name));
-    setContacts(sortedContacts);
+    setFilteredContacts(sortedContacts);
   }
 
   function deleteContact(id) {
-    const updatedContacts = contacts.filter(contact => contact.id !== id);
-    setContacts(updatedContacts);
+    const updatedContacts = filteredContacts.filter(contact => contact.id !== id);
+    setFilteredContacts(updatedContacts);
   }
 
 
